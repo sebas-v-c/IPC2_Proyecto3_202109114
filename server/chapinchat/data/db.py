@@ -23,6 +23,9 @@ class DataBase:
                 return profile
         return None
 
+    def get_users_list(self) -> list:
+        return [user.text for user in self.root[2]]
+
     def get_discarted_words(self) -> list:
         return [word.text for word in self.root[0][1]]
 
@@ -46,8 +49,7 @@ class DataBase:
     @_save
     def save_new_word_in_profile(self, profile, word) -> None:
         target_profile = self.get_profile(profile)
-        new_word = ET.Element("palabra")
-        new_word.text = word
+        new_word = ET.Element("palabra", text=word)
 
         target_profile[1].append(new_word)
 
@@ -56,6 +58,23 @@ class DataBase:
         word_element = ET.Element("palabra")
         word_element.text = word
         self.root[0][1].append(word_element)
+
+    @_save
+    def save_new_message(self, place, date, time, user, body) -> None:
+        message = ET.Element("mensaje")
+        place_elem = ET.SubElement(message, "lugar").text = place
+        date_elem = ET.SubElement(message, "fecha").text = date
+        time_elem = ET.SubElement(message, "hora").text = time
+        user_elem = ET.SubElement(message, "usuario").text = user
+        social_elem = ET.SubElement(message, "redSocial").text = "ChapinChat"
+        body_elem = ET.SubElement(message, "cuerpo").text = body
+        self.root[1].append(message)
+
+    @_save
+    def save_new_user(self, username) -> None:
+        user = ET.Element("usuario")
+        user.text = username
+        self.root[2].append(user)
 
 
 def init_db(app):
@@ -73,6 +92,8 @@ def init_db(app):
   </configuracion>
   <listaMensajes>
   </listaMensajes>
+  <usuarios>
+  </usuarios>
 </database>
             """
             )
