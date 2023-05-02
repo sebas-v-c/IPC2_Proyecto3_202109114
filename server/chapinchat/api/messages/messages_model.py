@@ -4,7 +4,7 @@ from chapinchat.data.db import DataBase
 from flask import current_app
 
 
-def save_user_profile(data) -> str:
+def save_new_messages(data) -> str:
     DB_NAME = current_app.config["DATABASE"]
     root = ET.fromstring(data)
     db = DataBase(DB_NAME)

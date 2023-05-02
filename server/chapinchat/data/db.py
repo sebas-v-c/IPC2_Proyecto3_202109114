@@ -23,6 +23,9 @@ class DataBase:
                 return profile
         return None
 
+    def get_discarted_words(self) -> list:
+        return [word.text for word in self.root[0][1]]
+
     def _save(func):
         def wrapper(self, *args, **kwargs):
             func(self, *args, **kwargs)
@@ -39,6 +42,20 @@ class DataBase:
     @_save
     def save_new_profile(self, new_profile: ET.Element) -> None:
         self.root[0][0].append(new_profile)
+
+    @_save
+    def save_new_word_in_profile(self, profile, word) -> None:
+        target_profile = self.get_profile(profile)
+        new_word = ET.Element("palabra")
+        new_word.text = word
+
+        target_profile[1].append(new_word)
+
+    @_save
+    def save_new_discarted_word(self, word) -> None:
+        word_element = ET.Element("palabra")
+        word_element.text = word
+        self.root[0][1].append(word_element)
 
 
 def init_db(app):
