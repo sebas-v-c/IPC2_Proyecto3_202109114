@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import xml.dom.minidom
 import re
+from chapinchat.api.messages.metrics import MessageStats
 
 from chapinchat.data.db import DataBase
 from flask import current_app
@@ -59,3 +60,85 @@ def save_new_messages(data) -> str:
     # format the response object
     response_string = ET.tostring(response_root, encoding="utf-8", xml_declaration=True)
     return xml.dom.minidom.parseString(response_string).toprettyxml(indent="    ")
+
+
+# get an html table of
+def get_message_detail(username: str, date="") -> list[MessageStats]:
+    DB_NAME = current_app.config["DATABASE"]
+    db = DataBase(DB_NAME)
+
+    messages = db.get_messages(username=username, date=date)
+    if len(messages) == 0:
+        return []
+
+    message_objects: list[MessageStats] = []
+    profiles = db.get_profile_list()
+    profile_objects = db.get_all_profiles()
+    discarted = db.get_discarted_words()
+    for message in messages:
+        text = str(message[5].text)
+        msg_stats = MessageStats(
+            str(message[3].text),
+            str(message[1].text),
+            str(message[2].text),
+            text,
+            profiles,
+        )
+        msg_stats.remove_words(discarted)
+
+        msg_stats.process_statistics(profile_objects)
+        message_objects.append(msg_stats)
+
+    # convert the information objects into a table
+    build = '<table border="1">'
+
+    build = "\n".join([build, "<tr>"])
+    build = "\n".join([build, "<th>Mensaje</th>"])
+    for profile in profiles:
+        build = "\n".join([build, f'<th>% probabilidad perfil "{profile}"</th>'])
+    build = "\n".join([build, "</tr>"])
+
+    for i, message in enumerate(message_objects):
+        build = "\n".join([build, "<tr>"])
+        build = "\n".join([build, f"<td>{message.date} {message.time}</td>"])
+        for profile in profiles:
+            build = "\n".join(
+                [build, f"<td>{str(round(message.profiles[profile], 2))} %</td>"]
+            )
+        build = "\n".join([build, "</tr>"])
+
+    build = "\n".join([build, "</table>"])
+
+    return message_objects
+
+
+def get_html_table(message_objects: list[MessageStats]) -> str:
+    # convert the information objects into a table
+    DB_NAME = current_app.config["DATABASE"]
+    db = DataBase(DB_NAME)
+    profiles = db.get_profile_list()
+
+    build = '<table border="1">'
+
+    build = "\n".join([build, "<tr>"])
+    build = "\n".join([build, "<th>Mensaje</th>"])
+    for profile in profiles:
+        build = "\n".join([build, f'<th>% probabilidad perfil "{profile}"</th>'])
+    build = "\n".join([build, "</tr>"])
+
+    for i, message in enumerate(message_objects):
+        build = "\n".join([build, "<tr>"])
+        build = "\n".join([build, f"<td>{message.date} {message.time}</td>"])
+        for profile in profiles:
+            build = "\n".join(
+                [build, f"<td>{str(round(message.profiles[profile], 2))} %</td>"]
+            )
+        build = "\n".join([build, "</tr>"])
+
+    build = "\n".join([build, "</table>"])
+
+    return build
+
+
+def get_all_message_detail(date="") -> list[str]:
+    return []

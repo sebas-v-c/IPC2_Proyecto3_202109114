@@ -1,10 +1,9 @@
 import os
 from flask import Blueprint, current_app, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import json
 
-from chapinchat.api.users.users_model import save_user_profile
-from .messages_model import save_new_messages
-
+import chapinchat.api.messages.messages_model as msg_md
 
 messages = Blueprint("messages", __name__)
 
@@ -32,17 +31,36 @@ def define_profiles():
     if file and allowed_file(file.filename):
         xml_str = file.stream.read()
         # xml_str = str(file.stream.read())
-        report = save_new_messages(xml_str)
+        report = msg_md.save_new_messages(xml_str)
         return report, 200, {"Content-Type": "application/xml"}
 
     return "invalid file name"
 
 
 @messages.get("messages/detail/<username>")
-def user_weights(username):
-    return ""
+def message_detail(username):
+    # get an html string with a table
+    try:
+        data = request.get_json()
+        data = str(data).replace("'", '"')
+        data_dict = json.loads(data)
+        messages = msg_md.get_message_detail(username, data_dict["date"])
+    except:
+        messages = msg_md.get_message_detail(username)
+
+    table = msg_md.get_html_table(messages)
+    return table
 
 
-@messages.get("messages/detail/:all:")
-def all_user_weights():
-    return ""
+@messages.get("messages/detail/all/")
+def all_message_detail():
+    # get an html table by user
+    try:
+        data = request.get_json()
+        data = str(data).replace("'", '"')
+        data_dict = json.loads(data)
+        tables = msg_md.get_all_message_detail(data_dict["date"])
+    except:
+        tables = msg_md.get_all_message_detail()
+
+    return "\n".join(tables)

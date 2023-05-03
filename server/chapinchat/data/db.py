@@ -23,11 +23,41 @@ class DataBase:
                 return profile
         return None
 
+    def get_all_profiles(self) -> list:
+        profile_list = []
+        for profile in self.root[0][0]:
+            dict_profile = {}
+            dict_profile["name"] = profile[0].text
+            dict_profile["keywords"] = [item.text for item in profile[1]]
+            profile_list.append(dict_profile)
+
+        return profile_list
+
+    def get_profile_list(self) -> list:
+        return [profile[0].text for profile in self.root[0][0]]
+
     def get_users_list(self) -> list:
         return [user.text for user in self.root[2]]
 
     def get_discarted_words(self) -> list:
         return [word.text for word in self.root[0][1]]
+
+    def get_messages(self, username="", date="") -> ET.Element:
+        message_list = ET.Element("listaMensajes")
+
+        if username:
+            for message in self.root[1]:
+                if message[3].text == username:
+                    message_list.append(message)
+        else:
+            message_list = self.root[1]
+
+        if date:
+            for message in message_list:
+                if message[1].text != date:
+                    message_list.remove(message)
+
+        return message_list
 
     def _save(func):
         def wrapper(self, *args, **kwargs):
