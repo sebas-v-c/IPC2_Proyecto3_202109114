@@ -47,15 +47,19 @@ class DataBase:
 
         if username:
             for message in self.root[1]:
-                if message[3].text == username:
-                    message_list.append(message)
+                if date:
+                    if message[3].text == username and message[1].text == date:
+                        message_list.append(message)
+                else:
+                    if message[3].text == username:
+                        message_list.append(message)
         else:
             message_list = self.root[1]
 
-        if date:
-            for message in message_list:
-                if message[1].text != date:
-                    message_list.remove(message)
+        # if date:
+        #     for message in message_list:
+        #         if message[1].text != date:
+        #             message_list.remove(message)
 
         return message_list
 

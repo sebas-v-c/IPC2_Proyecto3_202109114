@@ -121,6 +121,10 @@ def get_html_table(message_objects: list[MessageStats]) -> str:
     build = '<table border="1">'
 
     build = "\n".join([build, "<tr>"])
+    build = "\n".join([build, f"<th>{message_objects[0].username}</th>"])
+    build = "\n".join([build, "</tr>"])
+
+    build = "\n".join([build, "<tr>"])
     build = "\n".join([build, "<th>Mensaje</th>"])
     for profile in profiles:
         build = "\n".join([build, f'<th>% probabilidad perfil "{profile}"</th>'])
@@ -140,5 +144,14 @@ def get_html_table(message_objects: list[MessageStats]) -> str:
     return build
 
 
-def get_all_message_detail(date="") -> list[str]:
-    return []
+def get_all_message_detail(date="") -> list[list[MessageStats]]:
+    DB_NAME = current_app.config["DATABASE"]
+    db = DataBase(DB_NAME)
+
+    user_list = db.get_users_list()
+    message_by_user: list[list[MessageStats]] = []
+
+    for user in user_list:
+        message_by_user.append(get_message_detail(user, date))
+
+    return message_by_user

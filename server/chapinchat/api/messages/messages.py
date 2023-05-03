@@ -59,8 +59,16 @@ def all_message_detail():
         data = request.get_json()
         data = str(data).replace("'", '"')
         data_dict = json.loads(data)
-        tables = msg_md.get_all_message_detail(data_dict["date"])
+        messages = msg_md.get_all_message_detail(data_dict["date"])
     except:
-        tables = msg_md.get_all_message_detail()
+        messages = msg_md.get_all_message_detail()
+
+    print(messages)
+    tables: list[str] = []
+    for list_item in messages:
+        try:
+            tables.append(msg_md.get_html_table(list_item))
+        except:
+            continue
 
     return "\n".join(tables)
