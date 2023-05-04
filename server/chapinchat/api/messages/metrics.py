@@ -15,7 +15,7 @@ class MessageStats:
         profiles_list: list,
     ) -> None:
         self.username = username
-        self.profiles = dict.fromkeys(profiles_list)
+        self.profiles = dict.fromkeys(profiles_list, 0)
         self.profile_list = profiles_list
         self.date = date
         self.time = time

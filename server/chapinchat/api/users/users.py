@@ -1,8 +1,12 @@
 import os
 from flask import Blueprint, current_app, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import json
 
-from chapinchat.api.users.users_model import save_user_profile
+import chapinchat.api.messages.messages_model as msg_md
+import chapinchat.api.users.users_model as usr_md
+
+# from chapinchat.api.users.users_model import save_user_profile
 
 
 users = Blueprint("users", __name__)
@@ -31,7 +35,7 @@ def define_profiles():
     if file and allowed_file(file.filename):
         xml_str = file.stream.read()
         # xml_str = str(file.stream.read())
-        report = save_user_profile(xml_str)
+        report = usr_md.save_user_profile(xml_str)
         return report, 200, {"Content-Type": "application/xml"}
 
     return "invalid file name"
@@ -39,9 +43,28 @@ def define_profiles():
 
 @users.get("users/weights/<username>")
 def user_weights(username):
-    return ""
+    messages = msg_md.get_message_detail(username)
+
+    user_weight = usr_md.get_user_weigth(messages)
+    if user_weight is None:
+        return ""
+
+    table = usr_md.get_html_table(user_weight)
+    return table
 
 
-@users.get("users/weights/:all:")
+@users.get("users/weights/all/")
 def all_user_weights():
-    return ""
+    # get an html table by user
+    messages = msg_md.get_all_message_detail()
+
+    usr_weight = usr_md.get_all_user_weight(messages)
+
+    tables: list[str] = []
+    for list_item in usr_weight:
+        try:
+            tables.append(usr_md.get_html_table(list_item))
+        except:
+            continue
+
+    return "\n".join(tables)

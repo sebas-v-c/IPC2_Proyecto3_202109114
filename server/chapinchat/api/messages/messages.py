@@ -52,6 +52,9 @@ def message_detail(username):
     return table
 
 
+# TODO convert ot pdf this html
+
+
 @messages.get("messages/detail/all/")
 def all_message_detail():
     # get an html table by user
@@ -63,7 +66,6 @@ def all_message_detail():
     except:
         messages = msg_md.get_all_message_detail()
 
-    print(messages)
     tables: list[str] = []
     for list_item in messages:
         try:

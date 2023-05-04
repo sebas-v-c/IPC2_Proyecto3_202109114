@@ -39,6 +39,7 @@ def save_new_messages(data) -> str:
         # user regex
         user_regex = r"Usuario: [^\s\t\n]+(?:@[^\s\t\n]+)?"
         user_match = re.search(user_regex, message_info[i], flags=re.UNICODE)
+
         user_match = user_match.group(0)
         user_name = user_match.split(":")[1].strip()
         # save message
@@ -88,26 +89,6 @@ def get_message_detail(username: str, date="") -> list[MessageStats]:
 
         msg_stats.process_statistics(profile_objects)
         message_objects.append(msg_stats)
-
-    # convert the information objects into a table
-    build = '<table border="1">'
-
-    build = "\n".join([build, "<tr>"])
-    build = "\n".join([build, "<th>Mensaje</th>"])
-    for profile in profiles:
-        build = "\n".join([build, f'<th>% probabilidad perfil "{profile}"</th>'])
-    build = "\n".join([build, "</tr>"])
-
-    for i, message in enumerate(message_objects):
-        build = "\n".join([build, "<tr>"])
-        build = "\n".join([build, f"<td>{message.date} {message.time}</td>"])
-        for profile in profiles:
-            build = "\n".join(
-                [build, f"<td>{str(round(message.profiles[profile], 2))} %</td>"]
-            )
-        build = "\n".join([build, "</tr>"])
-
-    build = "\n".join([build, "</table>"])
 
     return message_objects
 
