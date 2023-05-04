@@ -33,8 +33,8 @@ class DataBase:
 
         return profile_list
 
-    def get_profile_list(self) -> list:
-        return [profile[0].text for profile in self.root[0][0]]
+    def get_profile_list(self) -> list[str]:
+        return [str(profile[0].text) for profile in self.root[0][0]]
 
     def get_users_list(self) -> list:
         return [user.text for user in self.root[2]]
