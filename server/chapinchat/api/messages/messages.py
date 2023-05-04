@@ -1,9 +1,10 @@
 import os
-from flask import Blueprint, current_app, flash, request, redirect, url_for
+from flask import Blueprint, current_app, flash, request, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 import json
 
 import chapinchat.api.messages.messages_model as msg_md
+import chapinchat.util.graphviz as graph
 
 messages = Blueprint("messages", __name__)
 
@@ -49,10 +50,8 @@ def message_detail(username):
         messages = msg_md.get_message_detail(username)
 
     table = msg_md.get_html_table(messages)
-    return table
-
-
-# TODO convert ot pdf this html
+    file = graph.to_one_table(table)
+    return send_file(file, as_attachment=False)
 
 
 @messages.get("messages/detail/all/")
@@ -73,4 +72,5 @@ def all_message_detail():
         except:
             continue
 
-    return "\n".join(tables)
+    file = graph.all_to_one_table(tables)
+    return send_file(file, as_attachment=False)

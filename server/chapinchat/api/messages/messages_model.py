@@ -102,13 +102,13 @@ def get_html_table(message_objects: list[MessageStats]) -> str:
     build = '<table border="1">'
 
     build = "\n".join([build, "<tr>"])
-    build = "\n".join([build, f"<th>{message_objects[0].username}</th>"])
+    build = "\n".join([build, f"<td><b>{message_objects[0].username}</b></td>"])
     build = "\n".join([build, "</tr>"])
 
     build = "\n".join([build, "<tr>"])
-    build = "\n".join([build, "<th>Mensaje</th>"])
+    build = "\n".join([build, "<td><b>Mensaje</b></td>"])
     for profile in profiles:
-        build = "\n".join([build, f'<th>% probabilidad perfil "{profile}"</th>'])
+        build = "\n".join([build, f'<td><b>% probabilidad perfil "{profile}"</b></td>'])
     build = "\n".join([build, "</tr>"])
 
     for i, message in enumerate(message_objects):

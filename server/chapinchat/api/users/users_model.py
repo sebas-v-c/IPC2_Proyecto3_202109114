@@ -87,12 +87,12 @@ def get_html_table(user_weigth: UserWeights) -> str:
     build = '<table border="1">'
 
     build = "\n".join([build, "<tr>"])
-    build = "\n".join([build, f"<th>{user_weigth.username}</th>"])
+    build = "\n".join([build, f"<td><b>{user_weigth.username}</b></td>"])
     build = "\n".join([build, "</tr>"])
 
     build = "\n".join([build, "<tr>"])
     for profile in profiles:
-        build = "\n".join([build, f'<th>Peso de Perfil "{profile}"</th>'])
+        build = "\n".join([build, f"<td><b>Peso de Perfil {profile}</b></td>"])
     build = "\n".join([build, "</tr>"])
 
     build = "\n".join([build, "<tr>"])

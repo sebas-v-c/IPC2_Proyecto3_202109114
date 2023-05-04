@@ -1,10 +1,11 @@
 import os
-from flask import Blueprint, current_app, flash, request, redirect, url_for
+from flask import Blueprint, current_app, flash, request, redirect, send_file, url_for
 from werkzeug.utils import secure_filename
 import json
 
 import chapinchat.api.messages.messages_model as msg_md
 import chapinchat.api.users.users_model as usr_md
+import chapinchat.util.graphviz as graph
 
 # from chapinchat.api.users.users_model import save_user_profile
 
@@ -50,7 +51,8 @@ def user_weights(username):
         return ""
 
     table = usr_md.get_html_table(user_weight)
-    return table
+    file = graph.to_one_table(table)
+    return send_file(file, as_attachment=False)
 
 
 @users.get("users/weights/all/")
@@ -67,4 +69,6 @@ def all_user_weights():
         except:
             continue
 
-    return "\n".join(tables)
+    file = graph.all_to_one_table(tables)
+
+    return send_file(file, as_attachment=False)
