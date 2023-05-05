@@ -33,11 +33,31 @@
                                 </a>
                             {% endif %}
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'services:profiles' %}">Carga de Perfiles y</br> Palabras Descartadas</a></li>
+                                <li><a class="dropdown-item" href="{% url 'services:profiles' %}">Carga de Perfiles y</br>Palabras Descartadas</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'services:messages' %}">Carga de Mensajes</a></li>
                             </ul>
                         </li>
+
+                        <li class="nav-item dropdown activate">
+                            {% if current == "services" %}
+                                <a class="nav-link dropdown-toggle" href="#" aria-current="true" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Peticiones
+                                </a>
+                            {% else %}
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Peticiones
+                                </a>
+                            {% endif %}
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'services:profiles' %}">Detalle de mensajes</br>Por usuario</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'services:messages' %}">Resumenes de pesos</br>Por usuario</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'services:messages' %}">Prueba creacion</br>De mensaje</a></li>
+                            </ul>
+                        </li>
+
 
                         <li class="nav-item">
                             {% if current == "petitions" %}
