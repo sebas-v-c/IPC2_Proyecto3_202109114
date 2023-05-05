@@ -5,5 +5,35 @@
 
 {% block content %}
 
+<div class="container" style="padding-top: 50px;">
+    <h1 class="text-center">{{ page_title }}</h1>
+</div>
+
+
+<form method="post" action="{{ upload_url }}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="xml_file" class="form-label">Selecciona un archivo XML:</label>
+        <input type="file" name="xml_file" id="xml_file" accept=".xml" class="form-control-file" accept="application/xml">
+    </div>
+    <button type="submit" class="btn btn-primary">Cargar</button>
+</form>
+
+<div class="container" style="padding-top: 100px">
+  <pre>{{ res }}</pre>
+</div>
+
+<script>
+  const fileInput = document.querySelector('input[type=file]');
+
+  fileInput.addEventListener('dragover', function(e) {
+    e.preventDefault();
+  });
+
+  fileInput.addEventListener('drop', function(e) {
+    e.preventDefault();
+    fileInput.files = e.dataTransfer.files;
+  });
+</script>
 
 {% endblock %}

@@ -34,7 +34,7 @@ def define_profiles():
         report = msg_md.save_new_messages(xml_str)
         return report, 200, {"Content-Type": "application/xml"}
 
-    return "invalid file name"
+    return "invalid file name", 400
 
 
 @messages.get("messages/detail/<username>")

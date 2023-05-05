@@ -33,36 +33,29 @@
                                 </a>
                             {% endif %}
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Carga de Perfiles y</br> Palabras Descartadas</a></li>
+                                <li><a class="dropdown-item" href="{% url 'services:profiles' %}">Carga de Perfiles y</br> Palabras Descartadas</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Carga de Mensajes</a></li>
+                                <li><a class="dropdown-item" href="{% url 'services:messages' %}">Carga de Mensajes</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            {% if current == "services" %}
-                                <a class="nav-link active" aria-current="page" href="{% url 'services' %}">Servicios</a>
-                            {% else %}
-                                <a class="nav-link" aria-current="page" href="{% url 'services' %}">Servicios</a>
-                            {% endif %}
-                        </li>
-                        <li class="nav-item">
                             {% if current == "petitions" %}
                                 <a class="nav-link active" aria-current="page" href="{% url 'services' %}">Peticiones</a>
                             {% else %}
-                                <a class="nav-link" aria-current="page" href="{% url 'services' %}">Peticiones</a>
+                                <a class="nav-link" aria-current="page" href="{% url 'services:index' %}">Peticiones</a>
                             {% endif %}
                         </li>
                         <li class="nav-item">
                             {% if current == "help" %}
                                 <a class="nav-link active" aria-current="page" href="{% url 'services' %}">Ayuda</a>
                             {% else %}
-                                <a class="nav-link" aria-current="page" href="{% url 'services' %}">Ayuda</a>
+                                <a class="nav-link" aria-current="page" href="{% url 'services:index' %}">Ayuda</a>
                             {% endif %}
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
-                        <button type="button" class="btn btn-danger" type="submit">Reset</button>
+                        <button type="button" class="btn btn-danger" type="submit" onclick="confirmDelete()">Reset</button>
                     </form>
                 </div>
             </div>
@@ -75,6 +68,52 @@
             {% block content %}
             {% endblock %}
         </div>
+
+<script>
+function confirmDelete() {
+    if (confirm("Seguro deseas borrar toda la base de datos?")) {
+        // if the user confirms, perform the delete action
+        deleteResource();
+    }
+}
+
+function deleteResource() {
+    // use fetch() to make a DELETE request to the API endpoint
+    fetch('http://127.0.0.1:5000/api/reset', {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken') // include CSRF token in header
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Se ha resetado la base de datos!');
+            // redirect to a success page or reload the current page
+        } else {
+            alert('No se ha podido borrar la base de datos');
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+// function to get the value of the CSRF cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+</script>
 
     </body>
 </html>
