@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container" style="padding-top: 50px;">
+    <h1 class="text-center">{{ page_title }}</h1>
+</div>
+
+
+<form method="POST" action="{{ post_url }}">
+  {% csrf_token %}
+  {% if show_date %}
+  <div class="form-group">
+    <label for="date_field">Fecha:</label>
+    <input type="date" class="form-control" id="date_field" name="date_field">
+  </div>
+  {% endif %}
+
+  <div class="form-check form-check-inline">
+    <input type="checkbox" id="all_input" name="all_input" class="form-check-input">
+    <label for="yes-no-input" class="form-check-label checkbox-label">Todos Los Usuarios</label>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="text-input" class="col-sm-3 col-form-label">Nombre de Usuario:</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="text-input" name="username">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+    <div class="container">
+        <object data="data:application/pdf;base64,{{ pdf_content|b64encode }}" type="application/pdf" width="100%" height="800px">
+            <p>Your web browser doesn't have a PDF plugin. </p>
+        </object>
+    </div>
+
+
+{% endblock %}
