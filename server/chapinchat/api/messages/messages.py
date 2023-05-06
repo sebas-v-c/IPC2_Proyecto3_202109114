@@ -48,6 +48,9 @@ def message_detail(username):
     except:
         messages = msg_md.get_message_detail(username)
 
+    if len(messages) == 0:
+        return "Not found", 404
+
     table = msg_md.get_html_table(messages)
     file = graph.to_one_table(table)
     return send_file(file, as_attachment=False)

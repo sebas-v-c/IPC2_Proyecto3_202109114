@@ -94,6 +94,8 @@ def get_message_detail(username: str, date="") -> list[MessageStats]:
 
 
 def get_html_table(message_objects: list[MessageStats]) -> str:
+    if len(message_objects) == 0:
+        return ""
     # convert the information objects into a table
     DB_NAME = current_app.config["DATABASE"]
     db = DataBase(DB_NAME)

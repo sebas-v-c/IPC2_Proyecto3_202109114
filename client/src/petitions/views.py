@@ -60,7 +60,7 @@ def messages_detail(request):
             context["error"] = True
             return render(request, "petitions/search.html", context)
 
-        if not response.content:
+        if response.status_code == 404:
             context["no_file"] = True
             return render(request, "petitions/search.html", context)
 
