@@ -107,7 +107,6 @@ def test_model(xml) -> str:
     #
     response_string = ET.tostring(response_root, encoding="utf-8", xml_declaration=True)
     xml_string = response_string.decode("utf-8")
-    print(xml_string)
     import xml.dom.minidom
 
     dom = xml.dom.minidom.parseString(xml_string)

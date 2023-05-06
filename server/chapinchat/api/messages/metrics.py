@@ -41,8 +41,6 @@ class MessageStats:
             # using a dictionary is such an awful design, I should chage this later
             prof_name = profile["name"]
             keyword_list = profile["keywords"]
-            print(prof_name)
-            print(keyword_list)
             word_list = copy.deepcopy(self.word_list)
             multi_word_list = list(
                 filter(lambda x: True if len(x.split()) > 1 else False, keyword_list)

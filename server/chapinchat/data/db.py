@@ -83,7 +83,8 @@ class DataBase:
     @_save
     def save_new_word_in_profile(self, profile, word) -> None:
         target_profile = self.get_profile(profile)
-        new_word = ET.Element("palabra", text=word)
+        new_word = ET.Element("palabra")
+        new_word.text = word
 
         target_profile[1].append(new_word)
 
@@ -96,12 +97,18 @@ class DataBase:
     @_save
     def save_new_message(self, place, date, time, user, body) -> None:
         message = ET.Element("mensaje")
-        place_elem = ET.SubElement(message, "lugar").text = place
-        date_elem = ET.SubElement(message, "fecha").text = date
-        time_elem = ET.SubElement(message, "hora").text = time
-        user_elem = ET.SubElement(message, "usuario").text = user
-        social_elem = ET.SubElement(message, "redSocial").text = "ChapinChat"
-        body_elem = ET.SubElement(message, "cuerpo").text = body
+        place_elem = ET.SubElement(message, "lugar")
+        place_elem.text = place
+        date_elem = ET.SubElement(message, "fecha")
+        date_elem.text = date
+        time_elem = ET.SubElement(message, "hora")
+        time_elem.text = time
+        user_elem = ET.SubElement(message, "usuario")
+        user_elem.text = user
+        social_elem = ET.SubElement(message, "redSocial")
+        social_elem.text = "ChapinChat"
+        body_elem = ET.SubElement(message, "cuerpo")
+        body_elem.text = body
         self.root[1].append(message)
 
     @_save
