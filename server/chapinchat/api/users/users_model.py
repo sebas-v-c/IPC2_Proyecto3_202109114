@@ -4,7 +4,7 @@ import xml.dom.minidom
 from chapinchat.api.messages.metrics import MessageStats
 from chapinchat.api.users.metrics import UserWeights
 from chapinchat.data.db import DataBase
-from flask import current_app
+from flask import app, current_app
 
 
 def save_user_profile(data) -> str:
@@ -23,7 +23,13 @@ def save_user_profile(data) -> str:
         if db.get_profile(profile_name) is not None:
             db_profile = db.get_profile(profile_name)
             db_word_list = [word.text for word in db_profile[1]]
-            word_list = [word.text for word in profile[1]]
+
+            word_list = []
+            for w in profile[1]:
+                if w.text is None:
+                    word_list.append(w.attrib["text"])
+                else:
+                    word_list.append(w.text)
 
             diff = list(set(word_list) - set(db_word_list))
 

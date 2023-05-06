@@ -24,8 +24,11 @@ def messages_detail(request):
         all = request.POST.get("all_input")
         username = request.POST.get("username")
 
-        date[0], date[2] = date[2], date[0]
-        date = "/".join(date)
+        if date[0]:
+            date[0], date[2] = date[2], date[0]
+            date = "/".join(date)
+        else:
+            date = ""
 
         if all:
             response = requests.post(
