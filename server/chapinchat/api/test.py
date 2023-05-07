@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app
+from flask import Blueprint, Response, request, current_app, send_file
 import chapinchat.api.messages.messages_model as msg_md
 from chapinchat.api.messages.metrics import MessageStats
 import chapinchat.api.users.users_model as usr_md
@@ -41,6 +41,14 @@ def test():
         return report, 200, {"Content-Type": "application/xml"}
 
     return "invalid file name"
+
+
+@test_bp.get("/doc/")
+def get_doc():
+    return send_file(
+        "/home/zibas/Documents/USAC/SEMESTRE-5/IPC2/lab/IPC2_Proyecto3_202109114/ensayo.pdf",
+        as_attachment=False,
+    )
 
 
 import xml.etree.ElementTree as ET
