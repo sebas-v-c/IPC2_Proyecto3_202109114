@@ -31,6 +31,7 @@ def save_user_profile(data) -> str:
                 updated_profiles += 1
                 db.save_new_word_in_profile(profile_name, item)
         else:
+            print(new_profiles)
             new_profiles += 1
             db.save_new_profile(profile)
 

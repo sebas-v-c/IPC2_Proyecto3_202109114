@@ -25,13 +25,11 @@ def allowed_file(filename):
 def define_profiles():
     # check if the post request has the file part
     if "file" not in request.files:
-        flash("No file part")
         return "No file"
     file = request.files["file"]
     # If the user does not select a file, the browser submits an
     # empty file without a filename
     if file.filename == "":
-        flash("No selected file")
         return "Empty file"
     if file and allowed_file(file.filename):
         xml_str = file.stream.read()

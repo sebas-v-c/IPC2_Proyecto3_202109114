@@ -6,7 +6,7 @@ from chapinchat.data.db import init_db
 reset_bp = Blueprint("reset", __name__)
 
 
-@reset_bp.delete("/reset")
+@reset_bp.route("/reset", methods=["OPTIONS"])
 def reset_api():
     try:
         os.remove(current_app.config["DATABASE"])
